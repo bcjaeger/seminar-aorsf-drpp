@@ -1,0 +1,120 @@
+---
+title: "aorsf"
+subtitle: "Accelerated oblique random forests for<br/>survival, regression, and classification"
+author: "Byron C. Jaeger, PhD"
+institute: "Wake Forest University School of Medicine"
+format: revealjs
+---
+
+```{r}
+
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE,
+                      warning = FALSE,
+                      dpi = 300,
+                      fig.align = 'center')
+
+withr::with_dir(here::here(), {
+  targets::tar_load(c(penguin_figs))
+})
+
+```
+
+
+# Hello! My name is Byron 
+
+
+:::{.column width="25%"}
+I am an R enthusiast.
+
+I love dogs.
+
+I study risk <br/> prediction + machine learning
+:::
+
+:::{.column width="70%"}
+![](img/run_R_kids.png)
+:::
+
+# Background
+
+## Two types of machine learning
+
+<br/>
+
+:::{.column width="49%"}
+
+### Supervised
+
+- Labeled data
+- Predict an outcome
+- Learners
+- Risk prediction
+
+:::
+
+
+:::{.column width="49%"}
+
+### Unsupervised
+
+- Unlabeled data
+- Find structure
+- Clusters
+- Organize medical records
+
+:::
+
+# Decision trees and random forests
+
+---
+
+![Data were collected and made available by [Dr. Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the Palmer Station, a member of the [Long Term Ecological Research Network](https://lternet.edu/).](img/penguins.png){width=100%}
+
+---
+
+:::{.column width="20%"}
+
+Three types of penguins
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$demo
+```
+
+:::
+
+---
+
+:::{.column width="20%"}
+
+Three types of penguins
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$axis_1
+```
+
+:::
+
+---
+
+:::{.column width="20%"}
+
+Three types of penguins
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$axis_2
+```
+
+:::
