@@ -59,7 +59,7 @@ I study risk <br/> prediction + machine learning
 
 **Intervention**: SBP target of < 120 mm Hg (intensive) or < 140 mm Hg (standard). 
 
-**Primary outcome**: composite CV event or death.
+**Primary outcome**: composite CV event or CV death.
 
 **Results**: Median follow-up of 3.26 years (stopped early). Hazard ratio (95% CI) of 0.75 (0.64 to 0.89) with intensive versus standard treatment.
 
