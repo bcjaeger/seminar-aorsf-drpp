@@ -574,7 +574,7 @@ Byron C. Jaeger, PhD
 <section id="axis-based-and-oblique-trees" class="slide level2">
 <h2>Axis based and oblique trees</h2>
 <ul>
-<li><p>Axis based decision use a single predictor to split data, creating decision boundaries that lie perpendicular to the axis of that predictor.</p></li>
+<li><p>Axis based trees use a single predictor to split data, creating decision boundaries that lie perpendicular to the axis of that predictor.</p></li>
 <li><p>Oblique trees use a weighted combination of two or more predictors, creating decision boundaries that are neither perpendicular nor parallel to the axes of contributing predictors.</p></li>
 </ul>
 </section>
@@ -651,34 +651,33 @@ Byron C. Jaeger, PhD
 <section id="axis-based-vs-oblique" class="slide level2">
 <h2>Axis based vs oblique</h2>
 <ul>
-<li><p>Leo Breiman (2001) found oblique random forests compared more favorably to boosting than axis based ones</p></li>
-<li><p>Multiple benchmarks have found the same result. Oblique trees and oblique forests have higher prediction accuracy than their axis-based counterparts.</p></li>
+<li><p>Leo Breiman found oblique random forests compared more favorably to boosting than axis based ones.<sup>1</sup></p></li>
+<li><p>Other benchmarks have found the same result.<sup>2</sup> Oblique random forests have high prediction accuracy.<sup>3</sup></p></li>
 </ul>
-<p>Yet, everyone is using axis-based random forests. <strong>Why?</strong></p>
-</section></section>
-<section>
-<section id="aorsf" class="title-slide slide level1 center">
-<h1>aorsf</h1>
-
-</section>
-<section id="aorsf-benchmark" class="slide level2">
-<h2>aorsf Benchmark<sup>1</sup></h2>
-<p><strong>Goal</strong>: Test if a fast version of the oblique random survival forest (<code>aorsf</code>) is as good as the original (<code>obliqueRSF</code>).</p>
-<ul>
-<li><p>Evaluated both in 35 risk prediction tasks (21 datasets)</p></li>
-<li><p>Measured computation time, C-statistic and index of prediction accuracy (IPA).</p></li>
-<li><p>Used Bayesian linear mixed models to test for differences in expected C-statistic and IPA.</p></li>
-</ul>
-<aside><ol class="aside-footnotes"><li id="fn5"><p>Jaeger BC, Welden S, Lenoir K, Speiser JL, Segar MW, Pandey A, Pajewski NM. <a href="https://www.tandfonline.com/doi/full/10.1080/10618600.2023.2231048">Accelerated and interpretable oblique random survival forests</a>. Journal of Computational and Graphical Statistics. 2023 Aug 3:1-6.</p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn5"><p>Breiman L. <a href="https://link.springer.com/article/10.1023/a:1010933404324">Random forests</a>. Machine learning. 2001 Oct;45:5-32.</p></li><li id="fn6"><p>Katuwal R, Suganthan PN, Zhang L. Heterogeneous oblique random forest. Pattern Recognition. 2020 Mar 1;99:107078.</p></li><li id="fn7"><p>Menze BH, Kelm BM, Splitthoff DN, Koethe U, Hamprecht FA. On oblique random forests. Machine Learning and Knowledge Discovery in Databases: European Conference, ECML PKDD 2011, Athens, Greece, September 5-9, 2011, Proceedings, Part II 22 2011 (pp.&nbsp;453-469). Springer Berlin Heidelberg.</p></li></ol></aside></section>
 <section class="slide level2">
 
-<p>Everyone is using axis-based random forests. Here’s why</p>
+<p>Yet, everyone uses axis-based random forests. Here’s why:</p>
 
 <img data-src="index_files/figure-revealjs/unnamed-chunk-10-1.png" width="3000" class="r-stretch quarto-figure-center"></section>
 <section class="slide level2">
 
 
-<img data-src="img/meme_slow_R.jpg" style="width:100.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="img/meme_slow_R.jpg" style="width:100.0%" class="r-stretch quarto-figure-center"></section></section>
+<section>
+<section id="aorsf-accelerated-oblique-random-survival-forest" class="title-slide slide level1 center">
+<h1><code>aorsf</code><br>accelerated oblique random survival forest</h1>
+
+</section>
+<section id="aorsf-benchmark" class="slide level2">
+<h2><code>aorsf</code> Benchmark<sup>1</sup></h2>
+<p><strong>Goal</strong>: Test if a fast version of the oblique random survival forest (<a href="https://docs.ropensci.org/aorsf/"><code>aorsf</code></a>) is as good as the original (<code>obliqueRSF</code>).</p>
+<ul>
+<li><p>Evaluated both in 35 risk prediction tasks (21 datasets)</p></li>
+<li><p>Measured computation time, C-statistic and index of prediction accuracy (IPA).</p></li>
+<li><p>Used Bayesian linear mixed models to test for differences in expected C-statistic and IPA.</p></li>
+</ul>
+<aside><ol class="aside-footnotes"><li id="fn8"><p>Jaeger BC, Welden S, Lenoir K, Speiser JL, Segar MW, Pandey A, Pajewski NM. <a href="https://www.tandfonline.com/doi/full/10.1080/10618600.2023.2231048">Accelerated and interpretable oblique random survival forests</a>. Journal of Computational and Graphical Statistics. 2023 Aug 3:1-6.</p></li></ol></aside></section>
 <section class="slide level2">
 
 <p>You can use oblique random forests now!</p>
@@ -702,21 +701,23 @@ Byron C. Jaeger, PhD
 <li><p>Accounting for censoring in tree nodes makes the rate of convergence <span class="math inline">\(\approx\)</span> # of variables in the event distribution.</p></li>
 </ul>
 <p><strong>So?</strong> Better predictions with less data | dependent censoring.</p>
-<aside><ol class="aside-footnotes"><li id="fn6"><p>Cui Y, Zhu R, Zhou M, Kosorok M. <a href="https://arxiv.org/abs/1707.09631">Consistency of survival tree and forest models: splitting bias and correction</a>. arXiv preprint arXiv:1707.09631. 2017 Jul 30.</p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn9"><p>Cui Y, Zhu R, Zhou M, Kosorok M. <a href="https://arxiv.org/abs/1707.09631">Consistency of survival tree and forest models: splitting bias and correction</a>. arXiv preprint arXiv:1707.09631. 2017 Jul 30.</p></li></ol></aside></section>
 <section id="dementia-and-dependent-censoring" class="slide level2">
 <h2>Dementia and dependent censoring</h2>
-<p><br> It’s definitely there. <br></p>
-<div class="cell" data-layout-align="center" data-hash="index_cache/revealjs/unnamed-chunk-14_5be201d4f5d138b947dad04b8b1930d3">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>fit_risk <span class="ot">&lt;-</span> <span class="fu">orsf</span>(time <span class="sc">+</span> status <span class="sc">~</span> . <span class="sc">-</span> pid, <span class="at">data =</span> data_sm)</span>
+<p>It seems to be present here.</p>
+<div class="cell" data-layout-align="center" data-hash="index_cache/revealjs/unnamed-chunk-14_3fb167f75242218f0821d8631df32d0f">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(aorsf)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>data_cens <span class="ot">&lt;-</span> data_sm <span class="sc">%&gt;%</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> (status <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span>),</span>
-<span id="cb1-5"><a href="#cb1-5"></a>         <span class="at">risk =</span> <span class="fu">as.numeric</span>(fit_risk<span class="sc">$</span>pred_oobag))</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a>fit_censor <span class="ot">&lt;-</span> <span class="fu">orsf_update</span>(fit_risk, <span class="at">data =</span> data_cens, </span>
-<span id="cb1-8"><a href="#cb1-8"></a>                          <span class="at">importance =</span> <span class="st">'permute'</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="dv">100</span><span class="sc">*</span><span class="fu">round</span>(fit_censor<span class="sc">$</span>importance[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a>fit_risk <span class="ot">&lt;-</span> <span class="fu">orsf</span>(time <span class="sc">+</span> status <span class="sc">~</span> . <span class="sc">-</span> pid, <span class="at">data =</span> data_sm)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>data_cens <span class="ot">&lt;-</span> data_sm <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> (status <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb1-7"><a href="#cb1-7"></a>         <span class="at">risk =</span> <span class="fu">as.numeric</span>(fit_risk<span class="sc">$</span>pred_oobag))</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a>fit_censor <span class="ot">&lt;-</span> <span class="fu">orsf_update</span>(fit_risk, <span class="at">data =</span> data_cens, </span>
+<span id="cb1-10"><a href="#cb1-10"></a>                          <span class="at">importance =</span> <span class="st">'permute'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="dv">100</span><span class="sc">*</span><span class="fu">round</span>(fit_censor<span class="sc">$</span>importance[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          risk            age moca_executive moca_language1          UMALI 
            0.4            0.2            0.1            0.1            0.1 </code></pre>
@@ -725,7 +726,7 @@ Byron C. Jaeger, PhD
 </section>
 <section id="dementia-and-dependent-censoring-1" class="slide level2">
 <h2>Dementia and dependent censoring</h2>
-<p><br> What if we do a watered down version of Dr.&nbsp;Cui’s idea? <br></p>
+<p>What if we do a watered down version of Dr.&nbsp;Cui’s idea?</p>
 <div class="cell" data-layout-align="center" data-hash="index_cache/revealjs/unnamed-chunk-15_174ecea95e2d86311e1401d2823bf652">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># W = status / (1 - Pr(censor))</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>wts_ipc <span class="ot">&lt;-</span> data_sm<span class="sc">$</span>status <span class="sc">/</span> </span>
@@ -1225,7 +1226,7 @@ Byron C. Jaeger, PhD
 <li><p>Includes tools for interpretation</p></li>
 <li><p>Does well with tabular data (deep learning may struggle)</p></li>
 </ul>
-<p><a href="https://docs.ropensci.org/aorsf/">Learn more about <code>aorsf</code></a></p>
+<p><strong>Question:</strong> Do you see points in the DRPP aims where <code>aorsf</code> could add value?</p>
 <div class="footer footer-default">
 
 </div>

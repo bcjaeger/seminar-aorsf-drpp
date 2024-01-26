@@ -218,7 +218,7 @@ penguin_figs$axis_3
 
 ## Axis based and oblique trees
 
-- Axis based decision use a single predictor to split data, creating decision boundaries that lie perpendicular to the axis of that predictor.
+- Axis based trees use a single predictor to split data, creating decision boundaries that lie perpendicular to the axis of that predictor.
 
 - Oblique trees use a weighted combination of two or more predictors, creating decision boundaries that are neither perpendicular nor parallel to the axes of contributing predictors.
 
@@ -292,28 +292,14 @@ penguin_figs$axis_3
 
 ## Axis based vs oblique
 
-- Leo Breiman (2001) found oblique random forests compared more favorably to boosting than axis based ones
+- Leo Breiman found oblique random forests compared more favorably to boosting than axis based ones.^[Breiman L. [Random forests](https://link.springer.com/article/10.1023/a:1010933404324). Machine learning. 2001 Oct;45:5-32.]
 
-- Multiple benchmarks have found the same result. Oblique trees and oblique forests have higher prediction accuracy than their axis-based counterparts.
-
-Yet, everyone is using axis-based random forests. **Why?**
-
-# aorsf
-
-## aorsf Benchmark^[Jaeger BC, Welden S, Lenoir K, Speiser JL, Segar MW, Pandey A, Pajewski NM. [Accelerated and interpretable oblique random survival forests](https://www.tandfonline.com/doi/full/10.1080/10618600.2023.2231048). Journal of Computational and Graphical Statistics. 2023 Aug 3:1-6.]
-
-**Goal**: Test if a fast version of the oblique random survival forest (`aorsf`) is as good as the original (`obliqueRSF`).
-
-- Evaluated both in 35 risk prediction tasks (21 datasets)
-
-- Measured computation time, C-statistic and index of prediction accuracy (IPA).
-
-- Used Bayesian linear mixed models to test for differences in expected C-statistic and IPA.
+- Other benchmarks have found the same result.^[Katuwal R, Suganthan PN, Zhang L. Heterogeneous oblique random forest. Pattern Recognition. 2020 Mar 1;99:107078.] Oblique random forests have high prediction accuracy.^[Menze BH, Kelm BM, Splitthoff DN, Koethe U, Hamprecht FA. On oblique random forests. Machine Learning and Knowledge Discovery in Databases: European Conference, ECML PKDD 2011, Athens, Greece, September 5-9, 2011, Proceedings, Part II 22 2011 (pp. 453-469). Springer Berlin Heidelberg.]
 
 
 ---
 
-Everyone is using axis-based random forests. Here's why
+Yet, everyone uses axis-based random forests. Here's why:
 
 ```{r, cache=FALSE, fig.height=6}
 bm_figs$time$slide_one
@@ -323,6 +309,20 @@ bm_figs$time$slide_one
 ---
 
 ![](img/meme_slow_R.jpg){width=100% fig-align="center"}
+
+# `aorsf`<br/>accelerated oblique random survival forest
+
+## `aorsf` Benchmark^[Jaeger BC, Welden S, Lenoir K, Speiser JL, Segar MW, Pandey A, Pajewski NM. [Accelerated and interpretable oblique random survival forests](https://www.tandfonline.com/doi/full/10.1080/10618600.2023.2231048). Journal of Computational and Graphical Statistics. 2023 Aug 3:1-6.]
+
+**Goal**: Test if a fast version of the oblique random survival forest ([`aorsf`](https://docs.ropensci.org/aorsf/)) is as good as the original (`obliqueRSF`).
+
+- Evaluated both in 35 risk prediction tasks (21 datasets)
+
+- Measured computation time, C-statistic and index of prediction accuracy (IPA).
+
+- Used Bayesian linear mixed models to test for differences in expected C-statistic and IPA.
+
+
 
 ---
 
@@ -360,10 +360,11 @@ This idea is based on work by Yifan Cui,^[Cui Y, Zhu R, Zhou M, Kosorok M. [Cons
 
 ## Dementia and dependent censoring
 
-<br/>
-It's definitely there.
-<br/>
+It seems to be present here.
+
 ```{r, echo=TRUE, cache=TRUE}
+
+library(aorsf)
 
 fit_risk <- orsf(time + status ~ . - pid, data = data_sm)
 
@@ -380,9 +381,8 @@ fit_censor <- orsf_update(fit_risk, data = data_cens,
 
 ## Dementia and dependent censoring
 
-<br/>
 What if we do a watered down version of Dr. Cui's idea?
-<br/>
+
 ```{r, echo=TRUE, eval=FALSE}
 
 # W = status / (1 - Pr(censor))
@@ -440,5 +440,4 @@ mccv_sm %>%
 
 - Does well with tabular data (deep learning may struggle)
 
-[Learn more about `aorsf`](https://docs.ropensci.org/aorsf/)
-
+**Question:** Do you see points in the DRPP aims where `aorsf` could add value?
