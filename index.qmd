@@ -1,9 +1,12 @@
 ---
-title: "aorsf"
-subtitle: "Accelerated oblique random forests for<br/>survival, regression, and classification"
+title: "SPRINT-MIND & aorsf"
+subtitle: "Ideas for contributions to the DRPP"
 author: "Byron C. Jaeger, PhD"
 institute: "Wake Forest University School of Medicine"
-format: revealjs
+format: 
+  revealjs:
+    slide-number: true
+    preview-links: true
 ---
 
 ```{r}
@@ -12,10 +15,22 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       warning = FALSE,
                       dpi = 300,
+                      cache = TRUE,
                       fig.align = 'center')
 
+library(ODRF)
+library(aorsf)
+library(ranger)
+library(survival)
+library(dplyr)
+library(table.glue)
+
+
 withr::with_dir(here::here(), {
-  targets::tar_load(c(penguin_figs))
+  targets::tar_load(c(penguin_figs, 
+                      data_sm, 
+                      bm_figs, 
+                      mccv_sm))
 })
 
 ```
@@ -36,7 +51,65 @@ I study risk <br/> prediction + machine learning
 ![](img/run_R_kids.png)
 :::
 
-# Background
+# Systolic Blood Pressure Intervention Trial (SPRINT)
+
+## SPRINT^[SPRINT Research Group. [A randomized trial of intensive versus standard blood-pressure control](https://www.nejm.org/doi/full/10.1056/nejmoa1511939). New England Journal of Medicine. 2015 Nov 26;373(22):2103-16.]
+
+**Participants**: 9361 non-diabetic persons with SBP ≥ 130 mm Hg and elevated CV risk.
+
+**Intervention**: SBP target of < 120 mm Hg (intensive) or < 140 mm Hg (standard). 
+
+**Primary outcome**: composite CV event or death.
+
+**Results**: Median follow-up of 3.26 years (stopped early). Hazard ratio (95% CI) of 0.75 (0.64 to 0.89) with intensive versus standard treatment.
+
+
+## SPRINT-MIND^[Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. [Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial](https://jamanetwork.com/journals/jama/fullarticle/2723256). Jama. 2019 Feb 12;321(6):553-61.] {auto-animate=true}
+
+
+**Primary outcome**: Probable dementia 
+
+**Results**: Median intervention time of 3.34 years, and total median follow-up 5.11 years. Hazard ratio (95% CI) of  
+
+::: {style="text-align: center"}
+0.83 (0.67 to 1.04)
+:::
+
+**Conclusion**: Intensive treatment was estimated to reduce risk of PD by 17%. More evidence is needed to clarify whether this result generalizes beyond SPRINT.
+
+
+## SPRINT-MIND^[Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. [Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial](https://jamanetwork.com/journals/jama/fullarticle/2723256). Jama. 2019 Feb 12;321(6):553-61.] {auto-animate=true}
+
+::: {style="text-align: center; font-size: 3em; color: red;"}
+0.83 (0.67 to 1.04)
+:::
+
+**Conclusion**: Just kidding. No effect 😔
+
+## SPRINT-MIND 2020
+
+**Goal**: Make the estimate of the SPRINT intervention’s effect on PD as clear as possible.
+
+**Methods**: Conduct an additional cognitive assessment by telephone with supplemental in-person testing and proxy interview to adjudicate of cognitive outcomes occurring since the date of the last visit, increasing the median follow-up from 5.11 to 9.1 years. 
+
+**Results** 🤐
+
+## Idea \# 1: SPRINT-MIND $\rightarrow$ DRPP
+
+Why?
+
+- Rich [longitudinal blood pressure data](https://bcjaeger.github.io/sprint-dementia-jm/#10)^[presented at AAIC 2023] can add value to dementia risk prediction models.
+
+- Counterfactual risk prediction:
+
+    + Risk for dementia (cohort data)
+    
+    + Risk for dementia if you target SBP < 140 mm Hg 
+    
+    + Risk for dementia if you target SBP < 120 mm Hg 
+
+
+# Oblique random forests
 
 ## Two types of machine learning
 
@@ -75,7 +148,9 @@ I study risk <br/> prediction + machine learning
 
 :::{.column width="20%"}
 
-Three types of penguins
+<br/>
+
+Decision trees are grown by recursively splitting a set of training data.
 
 :::
 
@@ -91,7 +166,7 @@ penguin_figs$demo
 
 :::{.column width="20%"}
 
-Three types of penguins
+First, split by flipper length
 
 :::
 
@@ -107,7 +182,11 @@ penguin_figs$axis_1
 
 :::{.column width="20%"}
 
-Three types of penguins
+First, split by flipper length
+
+<br/>
+
+Second, split by bill length among penguins with smaller flippers.
 
 :::
 
@@ -118,3 +197,248 @@ penguin_figs$axis_2
 ```
 
 :::
+
+---
+
+:::{.column width="20%"}
+
+Aggregating randomized trees gives the classic random forest
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$axis_3
+```
+
+:::
+
+---
+
+## Axis based and oblique trees
+
+- Axis based decision use a single predictor to split data, creating decision boundaries that lie perpendicular to the axis of that predictor.
+
+- Oblique trees use a weighted combination of two or more predictors, creating decision boundaries that are neither perpendicular nor parallel to the axes of contributing predictors.
+
+---
+
+:::{.column width="20%"}
+
+First, split mostly by bill length
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$oblique_1
+```
+
+:::
+
+---
+
+:::{.column width="20%"}
+
+First, split mostly by bill length
+
+<br/>
+
+Second, make a triangle for the gentoo.
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$oblique_2
+```
+
+:::
+
+---
+
+:::{.column width="20%"}
+
+Aggregating randomized trees gives the *oblique* random forest
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$oblique_3
+```
+
+:::
+
+---
+
+:::{.column width="20%"}
+
+Surprisingly different!
+
+:::
+
+:::{.column width="79%"}
+
+```{r, fig.height=6.8, fig.width=7.5}
+penguin_figs$axis_3
+```
+
+:::
+
+## Axis based vs oblique
+
+- Leo Breiman (2001) found oblique random forests compared more favorably to boosting than axis based ones
+
+- Multiple benchmarks have found the same result. Oblique trees and oblique forests have higher prediction accuracy than their axis-based counterparts.
+
+Yet, everyone is using axis-based random forests. **Why?**
+
+# aorsf
+
+## aorsf Benchmark^[Jaeger BC, Welden S, Lenoir K, Speiser JL, Segar MW, Pandey A, Pajewski NM. [Accelerated and interpretable oblique random survival forests](https://www.tandfonline.com/doi/full/10.1080/10618600.2023.2231048). Journal of Computational and Graphical Statistics. 2023 Aug 3:1-6.]
+
+**Goal**: Test if a fast version of the oblique random survival forest (`aorsf`) is as good as the original (`obliqueRSF`).
+
+- Evaluated both in 35 risk prediction tasks (21 datasets)
+
+- Measured computation time, C-statistic and index of prediction accuracy (IPA).
+
+- Used Bayesian linear mixed models to test for differences in expected C-statistic and IPA.
+
+
+---
+
+Everyone is using axis-based random forests. Here's why
+
+```{r, cache=FALSE, fig.height=6}
+bm_figs$time$slide_one
+```
+
+
+---
+
+![](img/meme_slow_R.jpg){width=100% fig-align="center"}
+
+---
+
+You can use oblique random forests now!
+
+```{r, cache=FALSE, fig.height=6}
+bm_figs$time$slide_two
+```
+
+---
+
+And making them fast didn't break their predictions
+
+```{r}
+bm_figs$eval$`C-statistic`
+```
+
+---
+
+In fact, our newer version has improved IPA
+
+```{r}
+bm_figs$eval$`Index of Prediction Accuracy`
+```
+
+## Idea \# 2: dpt. censoring $\rightarrow$ `aorsf`
+
+This idea is based on work by Yifan Cui,^[Cui Y, Zhu R, Zhou M, Kosorok M. [Consistency of survival tree and forest models: splitting bias and correction](https://arxiv.org/abs/1707.09631). arXiv preprint arXiv:1707.09631. 2017 Jul 30.] who proved:
+
+- Random forests are consistent estimators for risk with convergence rate $\approx$ \# of variables in the censoring distribution $+$ \# of variables in the event distribution.
+
+- Accounting for censoring in tree nodes makes the rate of convergence $\approx$ \# of variables in the event distribution.
+
+**So?** Better predictions with less data | dependent censoring.
+
+## Dementia and dependent censoring
+
+<br/>
+It's definitely there.
+<br/>
+```{r, echo=TRUE, cache=TRUE}
+
+fit_risk <- orsf(time + status ~ . - pid, data = data_sm)
+
+data_cens <- data_sm %>%
+  mutate(status = (status - 1) * (-1),
+         risk = as.numeric(fit_risk$pred_oobag))
+
+fit_censor <- orsf_update(fit_risk, data = data_cens, 
+                          importance = 'permute')
+
+100*round(fit_censor$importance[1:5], 3)
+
+```
+
+## Dementia and dependent censoring
+
+<br/>
+What if we do a watered down version of Dr. Cui's idea?
+<br/>
+```{r, echo=TRUE, eval=FALSE}
+
+# W = status / (1 - Pr(censor))
+wts_ipc <- data_sm$status / 
+  as.numeric(1 - fit_censor$pred_oobag)
+
+# don't ignore censored obs
+wts_ipc[wts_ipc == 0] <- min(wts_ipc[wts_ipc!=0])
+
+# re-fit the risk prediction model, but up-weight
+# participants with events who had a high chance
+# to be censored (Dr. Cui's method does this in 
+# every node of every decision tree). 
+fit_aorsf_ipc <- orsf_update(fit_aorsf, weights = wts_ipc)
+
+```
+
+## Dementia and dependent censoring
+
+```{r}
+
+library(gt)
+
+mccv_sm %>% 
+  group_by(model) %>% 
+  summarize(auc_sd = sd(auc),
+            ipa_sd = sd(ipa),
+            auc_mean = mean(auc),
+            ipa_mean = mean(ipa)) %>% 
+  arrange(desc(ipa_mean)) %>% 
+  transmute(
+    model = recode(model,
+                   "aorsf" = "Standard oblique RF",
+                   "rsf" = "Standard axis-based RF",
+                   "ipc" = "IPC oblique RF"),
+    auc = table_glue("{auc_mean * 100} ({auc_sd * 100})"),
+    ipa = table_glue("{ipa_mean * 100} ({ipa_sd * 100})")
+  ) %>% 
+  gt(rowname_col = 'model', caption = "Comparison of the inverse probability of censoring (IPC) approach to standard ones:") %>% 
+  cols_label(auc = "C-statistic",
+             ipa = "IPA") %>% 
+  cols_align('center') %>% 
+  cols_align('left', columns = 'model') %>% 
+  tab_stubhead("Modeling approach") %>% 
+  tab_source_note("Table values are mean (standard deviation) from 50 runs of Monte-Carlo cross-validation") %>% 
+  tab_options(table.width = pct(90), table.font.size = "100%")
+
+```
+
+## Idea \# 3: `aorsf` $\rightarrow$ DRPP
+
+- High prediction accuracy and computational efficiency
+
+- Includes tools for interpretation
+
+- Does well with tabular data (deep learning may struggle)
+
+[Learn more about `aorsf`](https://docs.ropensci.org/aorsf/)
+

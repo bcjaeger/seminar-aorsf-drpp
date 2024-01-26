@@ -8,4 +8,15 @@ library(tidyverse)
 library(palmerpenguins)
 library(ggforce)
 
-conflicts_prefer(dplyr::filter)
+library(rpart)
+library(parttree)
+library(ranger)
+library(aorsf)
+library(randomForestSRC)
+library(riskRegression)
+library(survival)
+
+library(microbenchmark)
+library(ggridges)
+
+source("conflicts.R")
