@@ -55,7 +55,7 @@ I study risk <br/> prediction + machine learning
 
 ## SPRINT^[SPRINT Research Group. [A randomized trial of intensive versus standard blood-pressure control](https://www.nejm.org/doi/full/10.1056/nejmoa1511939). New England Journal of Medicine. 2015 Nov 26;373(22):2103-16.]
 
-**Participants**: 9361 non-diabetic persons with SBP ≥ 130 mm Hg and elevated CV risk.
+**Participants**: 9361 non-diabetic persons with SBP ≥ 130 mm Hg and elevated cardiovascular (CV) risk.
 
 **Intervention**: SBP target of < 120 mm Hg (intensive) or < 140 mm Hg (standard). 
 
