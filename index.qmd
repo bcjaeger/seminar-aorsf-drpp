@@ -53,7 +53,7 @@ I study risk <br/> prediction + machine learning
 
 # Systolic Blood Pressure Intervention Trial (SPRINT)
 
-## SPRINT^[SPRINT Research Group. [A randomized trial of intensive versus standard blood-pressure control](https://www.nejm.org/doi/full/10.1056/nejmoa1511939). New England Journal of Medicine. 2015 Nov 26;373(22):2103-16.]
+## SPRINT, primary analysis^[SPRINT Research Group. [A randomized trial of intensive versus standard blood-pressure control](https://www.nejm.org/doi/full/10.1056/nejmoa1511939). New England Journal of Medicine. 2015 Nov 26;373(22):2103-16.]
 
 **Participants**: 9361 non-diabetic persons with SBP ≥ 130 mm Hg and elevated cardiovascular (CV) risk.
 
@@ -64,7 +64,7 @@ I study risk <br/> prediction + machine learning
 **Results**: Median follow-up of 3.26 years (stopped early). Hazard ratio (95% CI) of 0.75 (0.64 to 0.89) with intensive versus standard treatment.
 
 
-## SPRINT-MIND^[Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. [Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial](https://jamanetwork.com/journals/jama/fullarticle/2723256). Jama. 2019 Feb 12;321(6):553-61.] {auto-animate=true}
+## SPRINT, cognition analysis^[Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. [Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial](https://jamanetwork.com/journals/jama/fullarticle/2723256). Jama. 2019 Feb 12;321(6):553-61.] {auto-animate=true}
 
 
 **Primary outcome**: Probable dementia 
@@ -78,7 +78,7 @@ I study risk <br/> prediction + machine learning
 **Conclusion**: Intensive treatment was estimated to reduce risk of PD by 17%. More evidence is needed to clarify whether this result generalizes beyond SPRINT.
 
 
-## SPRINT-MIND^[Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. [Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial](https://jamanetwork.com/journals/jama/fullarticle/2723256). Jama. 2019 Feb 12;321(6):553-61.] {auto-animate=true}
+## SPRINT, cognition analysis^[Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. [Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial](https://jamanetwork.com/journals/jama/fullarticle/2723256). Jama. 2019 Feb 12;321(6):553-61.] {auto-animate=true}
 
 ::: {style="text-align: center; font-size: 3em; color: red;"}
 0.83 (0.67 to 1.04)
@@ -90,7 +90,7 @@ I study risk <br/> prediction + machine learning
 
 **Goal**: Make the estimate of the SPRINT intervention’s effect on PD as clear as possible.
 
-**Methods**: Conduct an additional cognitive assessment by telephone with supplemental in-person testing and proxy interview to adjudicate of cognitive outcomes occurring since the date of the last visit, increasing the median follow-up from 5.11 to 9.1 years. 
+**Methods**: Conduct an additional cognitive assessment by telephone with supplemental phone-based proxy interviews to adjudicate cognitive status since the date of the last visit, increasing the median follow-up from 5.11 to 9.1 years. 
 
 **Results** 🤐
 
@@ -369,7 +369,7 @@ library(aorsf)
 fit_risk <- orsf(time + status ~ . - pid, data = data_sm)
 
 data_cens <- data_sm %>%
-  mutate(status = (status - 1) * (-1),
+  mutate(status = 1 - status,
          risk = as.numeric(fit_risk$pred_oobag))
 
 fit_censor <- orsf_update(fit_risk, data = data_cens, 

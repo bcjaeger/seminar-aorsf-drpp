@@ -422,15 +422,15 @@ Byron C. Jaeger, PhD
 <h1>Systolic Blood Pressure Intervention Trial (SPRINT)</h1>
 
 </section>
-<section id="sprint" class="slide level2">
-<h2>SPRINT<sup>1</sup></h2>
+<section id="sprint-primary-analysis" class="slide level2">
+<h2>SPRINT, primary analysis<sup>1</sup></h2>
 <p><strong>Participants</strong>: 9361 non-diabetic persons with SBP ≥ 130 mm Hg and elevated cardiovascular (CV) risk.</p>
 <p><strong>Intervention</strong>: SBP target of &lt; 120 mm Hg (intensive) or &lt; 140 mm Hg (standard).</p>
 <p><strong>Primary outcome</strong>: composite CV event or CV death.</p>
 <p><strong>Results</strong>: Median follow-up of 3.26 years (stopped early). Hazard ratio (95% CI) of 0.75 (0.64 to 0.89) with intensive versus standard treatment.</p>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>SPRINT Research Group. <a href="https://www.nejm.org/doi/full/10.1056/nejmoa1511939">A randomized trial of intensive versus standard blood-pressure control</a>. New England Journal of Medicine. 2015 Nov 26;373(22):2103-16.</p></li></ol></aside></section>
-<section id="sprint-mind" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">SPRINT-MIND<sup>1</sup></h2>
+<section id="sprint-cognition-analysis" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">SPRINT, cognition analysis<sup>1</sup></h2>
 <p><strong>Primary outcome</strong>: Probable dementia</p>
 <p><strong>Results</strong>: Median intervention time of 3.34 years, and total median follow-up 5.11 years. Hazard ratio (95% CI) of</p>
 <div style="text-align: center">
@@ -438,8 +438,8 @@ Byron C. Jaeger, PhD
 </div>
 <p><strong>Conclusion</strong>: Intensive treatment was estimated to reduce risk of PD by 17%. More evidence is needed to clarify whether this result generalizes beyond SPRINT.</p>
 <aside><ol class="aside-footnotes"><li id="fn2"><p>Williamson JD, Pajewski NM, Auchus AP, Bryan RN, Chelune G, Cheung AK, Cleveland ML, Coker LH, Crowe MG, Cushman WC, Cutler JA. <a href="https://jamanetwork.com/journals/jama/fullarticle/2723256">Effect of intensive vs standard blood pressure control on probable dementia: a randomized clinical trial</a>. Jama. 2019 Feb 12;321(6):553-61.</p></li></ol></aside></section>
-<section id="sprint-mind-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">SPRINT-MIND<sup>1</sup></h2>
+<section id="sprint-cognition-analysis-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">SPRINT, cognition analysis<sup>1</sup></h2>
 <div style="text-align: center; font-size: 3em; color: red;">
 <p>0.83 (0.67 to 1.04)</p>
 </div>
@@ -448,7 +448,7 @@ Byron C. Jaeger, PhD
 <section id="sprint-mind-2020" class="slide level2">
 <h2>SPRINT-MIND 2020</h2>
 <p><strong>Goal</strong>: Make the estimate of the SPRINT intervention’s effect on PD as clear as possible.</p>
-<p><strong>Methods</strong>: Conduct an additional cognitive assessment by telephone with supplemental in-person testing and proxy interview to adjudicate of cognitive outcomes occurring since the date of the last visit, increasing the median follow-up from 5.11 to 9.1 years.</p>
+<p><strong>Methods</strong>: Conduct an additional cognitive assessment by telephone with supplemental phone-based proxy interviews to adjudicate cognitive status since the date of the last visit, increasing the median follow-up from 5.11 to 9.1 years.</p>
 <p><strong>Results</strong> 🤐</p>
 </section>
 <section id="idea-1-sprint-mind-rightarrow-drpp" class="slide level2">
@@ -705,13 +705,13 @@ Byron C. Jaeger, PhD
 <section id="dementia-and-dependent-censoring" class="slide level2">
 <h2>Dementia and dependent censoring</h2>
 <p>It seems to be present here.</p>
-<div class="cell" data-layout-align="center" data-hash="index_cache/revealjs/unnamed-chunk-14_3fb167f75242218f0821d8631df32d0f">
+<div class="cell" data-layout-align="center" data-hash="index_cache/revealjs/unnamed-chunk-14_ee60a3f1f80d5856a6865538df981643">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(aorsf)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a>fit_risk <span class="ot">&lt;-</span> <span class="fu">orsf</span>(time <span class="sc">+</span> status <span class="sc">~</span> . <span class="sc">-</span> pid, <span class="at">data =</span> data_sm)</span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
 <span id="cb1-5"><a href="#cb1-5"></a>data_cens <span class="ot">&lt;-</span> data_sm <span class="sc">%&gt;%</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> (status <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> <span class="dv">1</span> <span class="sc">-</span> status,</span>
 <span id="cb1-7"><a href="#cb1-7"></a>         <span class="at">risk =</span> <span class="fu">as.numeric</span>(fit_risk<span class="sc">$</span>pred_oobag))</span>
 <span id="cb1-8"><a href="#cb1-8"></a></span>
 <span id="cb1-9"><a href="#cb1-9"></a>fit_censor <span class="ot">&lt;-</span> <span class="fu">orsf_update</span>(fit_risk, <span class="at">data =</span> data_cens, </span>
